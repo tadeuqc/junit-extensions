@@ -16,12 +16,13 @@
  */
 package io.github.glytching.junit.extension.random;
 
-import io.github.benas.randombeans.EnhancedRandomBuilder;
-import io.github.benas.randombeans.FieldDefinitionBuilder;
-import io.github.benas.randombeans.api.EnhancedRandom;
-import io.github.benas.randombeans.randomizers.range.DoubleRangeRandomizer;
-import io.github.benas.randombeans.randomizers.range.IntegerRangeRandomizer;
-import io.github.benas.randombeans.randomizers.text.StringRandomizer;
+import org.jeasy.random.EasyRandom;
+import org.jeasy.random.EasyRandomParameters;
+import org.jeasy.random.api.Randomizer;
+import org.jeasy.random.randomizers.range.DoubleRangeRandomizer;
+import org.jeasy.random.randomizers.range.IntegerRangeRandomizer;
+import org.jeasy.random.randomizers.text.StringRandomizer;
+import static org.jeasy.random.FieldPredicates.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
@@ -39,21 +40,15 @@ import static org.hamcrest.Matchers.*;
 
 public class RandomBeansExtensionOverrideTest {
 
-    static EnhancedRandom enhancedRandom = EnhancedRandomBuilder
-            .aNewEnhancedRandomBuilder()
-            .exclude(FieldDefinitionBuilder
-                    .field()
-                    .named("wotsits")
-                    .ofType(List.class)
-                    .inClass(DomainObject.class)
-                    .get())
-            .randomize(Integer.class, IntegerRangeRandomizer.aNewIntegerRangeRandomizer(0, 10))
-            .randomize(String.class, StringRandomizer.aNewStringRandomizer(5))
-            .randomize(Double.class, DoubleRangeRandomizer.aNewDoubleRangeRandomizer(0.0, 10.0))
-            .build();
+    static EasyRandom easyRandom = new EasyRandom(new EasyRandomParameters()
+            .excludeField(named("wotsits").and(ofType(List.class)).and(inClass(DomainObject.class)))
+            .randomize(Integer.class, new IntegerRangeRandomizer(0, 10))
+            .randomize(String.class, new StringRandomizer(5))
+            .randomize(Double.class, new DoubleRangeRandomizer(0.0, 10.0))
+    );
 
     @RegisterExtension
-    static RandomBeansExtension randomBeansExtension = new RandomBeansExtension(enhancedRandom);
+    static RandomBeansExtension randomBeansExtension = new RandomBeansExtension(easyRandom);
 
     // gather the random values to facilitate assertions on the distinct-ness of the value supplied to
     // each test
@@ -93,8 +88,7 @@ public class RandomBeansExtensionOverrideTest {
 
     @Test
     public void canInjectAPartiallyPopulatedRandomObjectWithProgrammaticExtensionRegistration(@Random DomainObject domainObject) {
-        assertThat(domainObject.getWotsits(), notNullValue());
-        assertThat(domainObject.getWotsits(), not(empty()));
+        assertThat(domainObject.getWotsits(), nullValue());
     }
 
     @Test

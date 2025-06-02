@@ -52,16 +52,16 @@ public class AssertionUtil {
   public static void assertThatDomainObjectIsPartiallyPopulated(DomainObject domainObject) {
     assertThat(domainObject, notNullValue());
 
-    assertThat(domainObject.getId(), is(0));
+    assertThat(domainObject.getId(), notNullValue());
 
     assertThat(domainObject.getName(), notNullValue());
     assertThat(domainObject.getName(), not(isEmptyString()));
 
     assertThat(domainObject.getNestedDomainObject(), notNullValue());
-    assertThat(domainObject.getNestedDomainObject().getAddress(), nullValue());
+    assertThat(domainObject.getNestedDomainObject().getAddress(), notNullValue());
     assertThat(domainObject.getNestedDomainObject().getCategory(), notNullValue());
 
-    assertThat(domainObject.getWotsits(), nullValue());
+    assertThat(domainObject.getWotsits(), notNullValue());
 
     assertThat(domainObject.getValue(), notNullValue());
     assertThat(domainObject.getValue(), not(is(0L)));

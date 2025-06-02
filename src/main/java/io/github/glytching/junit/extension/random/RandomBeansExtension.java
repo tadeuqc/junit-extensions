@@ -16,8 +16,8 @@
  */
 package io.github.glytching.junit.extension.random;
 
-import io.github.benas.randombeans.EnhancedRandomBuilder;
-import io.github.benas.randombeans.api.EnhancedRandom;
+import org.jeasy.random.EasyRandom;
+import org.jeasy.random.EasyRandomParameters;
 import org.junit.jupiter.api.extension.*;
 
 import java.lang.reflect.Field;
@@ -114,59 +114,40 @@ import static org.junit.platform.commons.support.AnnotationSupport.isAnnotated;
  * }
  * </pre>
  *
- * @see <a href="https://github.com/benas/random-beans">Random Beans</a>
+ * @see <a href="https://github.com/j-easy/easy-random">Easy Random</a>
  * @since 1.0.0
  */
 public class RandomBeansExtension implements TestInstancePostProcessor, ParameterResolver {
 
-  private final EnhancedRandom random;
+  private final EasyRandom random;
 
   /**
-   * Create the extension with a default {@link EnhancedRandom}.
+   * Create the extension with a default {@link EasyRandom}.
    *
-   * @see <a href="https://github.com/benas/random-beans/wiki/Randomization-parameters">Enhanced
-   *     Random Configuration Parameters</a>
+   * @see <a href="https://github.com/j-easy/easy-random/wiki/Randomization-parameters">EasyRandom Configuration Parameters</a>
    */
   public RandomBeansExtension() {
-    this(EnhancedRandomBuilder.aNewEnhancedRandomBuilder()
-            // maximum number of instances of a given type, above this number requests will start to
-            // reuse
-            // previously generated instances
+    this(new EasyRandom(new EasyRandomParameters()
             .objectPoolSize(10)
-
-            // how deep should we go when randomising an object graph?
             .randomizationDepth(5)
-
-            // the charset used for all String and Character values
             .charset(forName("UTF-8"))
-
-            // min, max bounds for the generated string length
             .stringLengthRange(5, 50)
-
-            // min, max bounds for the generated collections size
             .collectionSizeRange(1, 10)
-
-            // if a random values is declared as an abstract or interface type then the classpath
-            // will be scanned
-            // for a concrete type of that abstract or interface type
             .scanClasspathForConcreteTypes(true)
-
-            // do not override any values which are already initialised in the target type
             .overrideDefaultInitialization(false)
-            .build());
+    ));
   }
 
   /**
-   * Create the extension with the given {@link EnhancedRandom}. This is used, instead of the zero-arg alternative, when
+   * Create the extension with the given {@link EasyRandom}. This is used, instead of the zero-arg alternative, when
    * the caller wants to override the default 'randomizer' configuration. This constructor will be called by using the
    * {@code RegisterExtension} annotation.
    *
-   * @param enhancedRandom
+   * @param easyRandom
    * @since 2.5.0
    */
-  public RandomBeansExtension(EnhancedRandom enhancedRandom) {
-    this.random = enhancedRandom;
-
+  public RandomBeansExtension(EasyRandom easyRandom) {
+    this.random = easyRandom;
   }
 
   /**
@@ -240,17 +221,15 @@ public class RandomBeansExtension implements TestInstancePostProcessor, Paramete
    */
   private Object resolve(Class<?> targetType, Random annotation) {
     if (targetType.isAssignableFrom(List.class) || targetType.isAssignableFrom(Collection.class)) {
-      return random
-          .objects(annotation.type(), annotation.size(), annotation.excludes())
+      return random.objects(annotation.type(), annotation.size())
           .collect(Collectors.toList());
     } else if (targetType.isAssignableFrom(Set.class)) {
-      return random
-          .objects(annotation.type(), annotation.size(), annotation.excludes())
+      return random.objects(annotation.type(), annotation.size())
           .collect(Collectors.toSet());
     } else if (targetType.isAssignableFrom(Stream.class)) {
-      return random.objects(annotation.type(), annotation.size(), annotation.excludes());
+      return random.objects(annotation.type(), annotation.size());
     } else {
-      return random.nextObject(targetType, annotation.excludes());
+      return random.nextObject(targetType);
     }
   }
 

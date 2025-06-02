@@ -56,14 +56,13 @@
         <junit.platform.version>1.2.0</junit.platform.version>
         <junit.jupiter.version>5.2.0</junit.jupiter.version>
         <hamcrest.version>1.3</hamcrest.version>
-        <mockito.version>2.7.19</mockito.version>
-        <random.beans.version>3.9.0</random.beans.version>
+        <mockito.version>5.2.0</mockito.version>
 
         <maven.surefire.plugin.version>2.22.0</maven.surefire.plugin.version>
         <maven.jar.plugin.version>3.0.2</maven.jar.plugin.version>
         <maven.javadoc.plugin.version>3.0.0-M1</maven.javadoc.plugin.version>
         <maven.coveralls.plugin.version>4.3.0</maven.coveralls.plugin.version>
-        <maven.jacoco.plugin.version>0.7.9</maven.jacoco.plugin.version>
+        <maven.jacoco.plugin.version>0.8.8</maven.jacoco.plugin.version>
         <maven.source.plugin.version>3.0.0</maven.source.plugin.version>
     </properties>
 
@@ -179,9 +178,9 @@
             <version>${junit.jupiter.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.github.benas</groupId>
-            <artifactId>random-beans</artifactId>
-            <version>${random.beans.version}</version>
+            <groupId>io.github.dvgaba</groupId>
+            <artifactId>easy-random-core</artifactId>
+            <version>7.1.1</version>
         </dependency>
 
         <dependency>

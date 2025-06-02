@@ -1,9 +1,9 @@
 RandomBeansExtension
 ======
 
-> With thanks to the author of [Random Beans](https://github.com/benas/random-beans).
+> With thanks to the authors of [Easy Random](https://github.com/j-easy/easy-random) and [Easy Random (JDK 17+)](https://github.com/dvgaba/easy-random).
 
-Sometimes you don't care about the specific value of a class-under-test (or a class involved in a test) you just need it to be populated with _something_. The `RandomBeansExtension` wraps the [Random Beans](https://github.com/benas/random-beans) fake data generator in a JUnit Jupiter extension allowing you to inject 'fake' instances of classes, primitives, collections into your test cases. The extension supports injection of test class fields and test method parameters.
+Sometimes you don't care about the specific value of a class-under-test (or a class involved in a test) you just need it to be populated with _something_. The `RandomBeansExtension` wraps the [Easy Random](https://github.com/j-easy/easy-random) fake data generator (JDK 17+ fork: [dvgaba/easy-random](https://github.com/dvgaba/easy-random)) in a JUnit Jupiter extension, allowing you to inject 'fake' instances of classes, primitives, and collections into your test cases. The extension supports injection of test class fields and test method parameters.
 
 #### Usage
 
@@ -148,7 +148,7 @@ public class RandomBeansExtensionParameterTest {
 
 ##### Overriding the Default Randomization Parameters
  
-In the event that the default [randomization parameters](https://github.com/j-easy/easy-random/wiki/Randomization-parameters) declared by this extension are not sufficient/appropriate for your use, you can override the defaults by using `@RegisterExtension` to pass in your own instance of RandomBeans' `EnhancedRandom`. For example:      
+In the event that the default [randomization parameters](https://github.com/j-easy/easy-random/wiki/Randomization-parameters) declared by this extension are not sufficient/appropriate for your use, you can override the defaults by using `@RegisterExtension` to pass in your own instance of EasyRandom. For example:      
 
 ```
 public class RandomBeansExtensionProgrammaticRegistrationTest {
